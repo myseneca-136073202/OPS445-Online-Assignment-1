@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 
 '''
 OPS445 Assignment 1 - Winter 2022
@@ -38,6 +39,7 @@ def valid_date(date):
     try:
         str_day, str_month, str_year = date.split('-')
         if not str_day.isnumeric() or not str_month.isnumeric() or not str_year.isnumeric():
+            print("Error: wrong date entered")
             return False
         year = int(str_year)
         month = int(str_month)
@@ -57,11 +59,17 @@ def valid_date(date):
             feb_max = 29 # this is a leap year
         mon_max = { 1:31, 2:feb_max, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
 
-        if day<1 or day>mon_max[month] or month<1 or month>12:
+        if day<1 or day>mon_max[month]:
+            print("Error: wrong day entered")
+            return False
+        if month<1 or month>12:
+            print("Error: wrong month entered")
             return False
         return True
     except:
+        print("Error: wrong date entered")
         return False
+
    
     
 
@@ -74,8 +82,9 @@ def leap_year(year):
 def after(today):
     "after takes a valid date string in DD-MM-YYYY format and returns"
     "a date string for the next day in DD-MM-YYYY format."
-    if not valid_date(today):
-        return '00-00-0000'
+    check = valid_date(today)
+    if not check:
+        return check
     else:
         str_day, str_month, str_year = today.split('-')
         year = int(str_year)
@@ -118,8 +127,9 @@ def after(today):
 def before(today):
     "after takes a valid date string in DD-MM-YYYY format and returns"
     "a date string for the pass day in DD-MM-YYYY format."
-    if not valid_date(today):
-        return '00-00-0000'
+    check = valid_date(today)
+    if not check:
+        return check
     else:
         str_day, str_month, str_year = today.split('-')
         year = int(str_year)
@@ -165,29 +175,36 @@ def before(today):
 
 def dbda(start_date, num_days):
     end_date = "00-00-0000"
+    days = int(num_days)
     # create a loop
     # call before() or after() as appropriate
     # return end_date
-    if not valid_date(start_date):
-        return end_date
-    if num_days > 0:
-        for x in range(num_days):
+    check = valid_date(start_date)
+
+    if not check:
+        return check
+    if days > 0:
+        for x in range(days):
             start_date = after(start_date)
         end_date = start_date
     else:
-        for x in range(abs(num_days)):
+        for x in range(abs(days)):
             start_date = before(start_date)
         end_date = start_date
     return end_date
         
-
+    
 if __name__ == "__main__":
     # process command line arguments
     # call dbda()
     # output the result
-    
-    pass
+    program_name = sys.argv[0]
+    arguments = sys.argv[1:]
+    count = len(arguments)
+    dbda(arguments[0],arguments[1])
 
-print (dbda("29-02-2020",-123))
+
+    
+
 
 
