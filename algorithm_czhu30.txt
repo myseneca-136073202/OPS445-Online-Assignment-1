@@ -1,0 +1,2 @@
+ * A description of how the "after()" function works. The "after()" function is provided to you in the assign1.py template. Open the file, and use clear English to describe what line of code does in such a way that a competent programmer could reproduce the code without seeing it firsthand.
+ * You will then apply the same principles to create an algorithm for "before()", and "dbda()". 
