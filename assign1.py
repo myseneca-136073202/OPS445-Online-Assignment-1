@@ -35,18 +35,46 @@ def days_in_mon(year):
 def valid_date(date):
     "TODO enter docstring"
     # return True or False 
-    pass # TODO: delete this line, replace with valid code.
+    try:
+        str_day, str_month, str_year = date.split('-')
+        if not str_day.isnumeric() or not str_month.isnumeric() or not str_year.isnumeric():
+            return False
+        year = int(str_year)
+        month = int(str_month)
+        day = int(str_day)
+        lyear = leap_year(year)
+        if lyear == 0:
+            feb_max = 29 # this is a leap year
+        else:
+            feb_max = 28 # this is not a leap year
+
+        lyear = year % 100
+        if lyear == 0:
+            feb_max = 28 # this is not a leap year
+
+        lyear = year % 400
+        if lyear == 0:
+            feb_max = 29 # this is a leap year
+        mon_max = { 1:31, 2:feb_max, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
+
+        if day<1 or day>mon_max[month] or month<1 or month>12:
+            return False
+        return True
+    except:
+        return False
+   
+    
 
 def leap_year(year):
     "takes a year in YYYY format, and returns True if it's a leap year, False otherwise."
-    # TODO reorganize code, enter code from after() here.
-    pass # TODO: delete this line, replace with return statement.
+    lyear = year % 4 
+    return lyear
 
 
 def after(today):
     "after takes a valid date string in DD-MM-YYYY format and returns"
     "a date string for the next day in DD-MM-YYYY format."
-    if len(today) != 10:
+    if not valid_date(today):
         return '00-00-0000'
     else:
         str_day, str_month, str_year = today.split('-')
@@ -54,7 +82,7 @@ def after(today):
         month = int(str_month)
         day = int(str_day)
 
-        lyear = year % 4 # TODO: put this into the function leap_year.
+        lyear = leap_year(year)
         if lyear == 0:
             feb_max = 29 # this is a leap year
         else:
@@ -90,7 +118,7 @@ def after(today):
 def before(today):
     "after takes a valid date string in DD-MM-YYYY format and returns"
     "a date string for the pass day in DD-MM-YYYY format."
-    if len(today) != 10:
+    if not valid_date(today):
         return '00-00-0000'
     else:
         str_day, str_month, str_year = today.split('-')
@@ -98,7 +126,7 @@ def before(today):
         month = int(str_month)
         day = int(str_day)
 
-        lyear = year % 4 # TODO: put this into the function leap_year.
+        lyear = leap_year(year) 
         if lyear == 0:
             feb_max = 29 # this is a leap year
         else:
@@ -115,9 +143,10 @@ def before(today):
         tmp_day = day - 1 # past day
         mon_max = { 1:31, 2:feb_max, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
         
-        if tmp_day < 1 and month - 1 > 1:
+        if tmp_day < 1 and month - 1 > 0:
             to_day = mon_max[month-1]
             to_month = month-1
+            to_year = year
             
         elif tmp_day < 1 and month -1 < 1:
             to_month = 12
@@ -128,6 +157,8 @@ def before(today):
             to_day = tmp_day
             to_month = month
             to_year = year
+
+
         pass_date = str(to_day).zfill(2)+"-"+str(to_month).zfill(2)+"-"+str(to_year)
         return pass_date
     
@@ -137,9 +168,8 @@ def dbda(start_date, num_days):
     # create a loop
     # call before() or after() as appropriate
     # return end_date
-    print (start_date)
-    print (num_days)
-
+    if not valid_date(start_date):
+        return end_date
     if num_days > 0:
         for x in range(num_days):
             start_date = after(start_date)
@@ -155,8 +185,9 @@ if __name__ == "__main__":
     # process command line arguments
     # call dbda()
     # output the result
+    
     pass
 
-
+print (dbda("29-02-2020",-123))
 
 
