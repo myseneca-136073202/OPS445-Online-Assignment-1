@@ -19,6 +19,10 @@ Description: <Enter your documentation here>
 Date: 2022-02-06
 '''
 
+from asyncio.windows_events import NULL
+from contextlib import nullcontext
+
+
 def usage():
     "TODO enter docstring"
     pass # TODO: delete this line, replace with valid code.
@@ -83,18 +87,76 @@ def after(today):
         next_date = str(to_day).zfill(2)+"-"+str(to_month).zfill(2)+"-"+str(year)
         return next_date
 
-def before():
-    "TODO enter docstring."
-    pass # TODO replace this with code, using your algorithm document.
+def before(today):
+    "after takes a valid date string in DD-MM-YYYY format and returns"
+    "a date string for the pass day in DD-MM-YYYY format."
+    if len(today) != 10:
+        return '00-00-0000'
+    else:
+        str_day, str_month, str_year = today.split('-')
+        year = int(str_year)
+        month = int(str_month)
+        day = int(str_day)
+
+        lyear = year % 4 # TODO: put this into the function leap_year.
+        if lyear == 0:
+            feb_max = 29 # this is a leap year
+        else:
+            feb_max = 28 # this is not a leap year
+
+        lyear = year % 100
+        if lyear == 0:
+            feb_max = 28 # this is not a leap year
+
+        lyear = year % 400
+        if lyear == 0:
+            feb_max = 29 # this is a leap year
+
+        tmp_day = day - 1 # past day
+        mon_max = { 1:31, 2:feb_max, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
+        
+        if tmp_day < 1 and month - 1 > 1:
+            to_day = mon_max[month-1]
+            to_month = month-1
+            
+        elif tmp_day < 1 and month -1 < 1:
+            to_month = 12
+            to_day = mon_max[to_month]
+            to_year = year-1
+        
+        else:
+            to_day = tmp_day
+            to_month = month
+            to_year = year
+        pass_date = str(to_day).zfill(2)+"-"+str(to_month).zfill(2)+"-"+str(to_year)
+        return pass_date
+    
 
 def dbda(start_date, num_days):
-    end_date = 0
+    end_date = "00-00-0000"
     # create a loop
     # call before() or after() as appropriate
     # return end_date
+    print (start_date)
+    print (num_days)
+
+    if num_days > 0:
+        for x in range(num_days):
+            start_date = after(start_date)
+        end_date = start_date
+    else:
+        for x in range(abs(num_days)):
+            start_date = before(start_date)
+        end_date = start_date
+    return end_date
+        
 
 if __name__ == "__main__":
     # process command line arguments
     # call dbda()
     # output the result
     pass
+
+
+
+
