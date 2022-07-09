@@ -215,7 +215,7 @@ if __name__ == "__main__":
     program_name = sys.argv[0]
     arguments = sys.argv[1:]
     count = len(arguments)
-    dbda(arguments[0],arguments[1])
+    print(dbda(arguments[0],arguments[1]))
 
 
     
